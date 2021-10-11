@@ -24,6 +24,8 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ![alt text](https://raw.githubusercontent.com/mauroslucios/ediarista/main/public/img/diaristas/ediarista.png)
 
+![alt text](https://raw.githubusercontent.com/mauroslucios/ediarista/main/public/img/diaristas/ediaristaOne.png)
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
