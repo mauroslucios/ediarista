@@ -5,6 +5,7 @@ import theme from 'ui/themes/theme';
 import Head from 'next/head';
 import Header from 'ui/components/surfaces/header/header';
 import Footer from 'ui/components/surfaces/footer/footer';
+import { AppContainer } from 'ui/styles/pages/_app.style';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -27,9 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel='stylesheet' href='/fonts/tw-icons/css/treinaweb-icons.css' />
       </Head>
       <ThemeProvider theme={theme}>
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
+        <AppContainer>
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+        </AppContainer>
       </ThemeProvider>
     </>
   );
