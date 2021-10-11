@@ -4,6 +4,7 @@ import TextField from 'ui/components/inputs/textField/textField';
 import { OutlinedTextFieldProps } from '@mui/material';
 
 export interface TextFieldProps extends OutlinedTextFieldProps {
+  value: string;
   mask: string;
 }
 

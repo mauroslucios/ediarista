@@ -3,7 +3,7 @@ import SafeEnvironment from 'ui/components/feedback/SafeEnvironment/SafeEnvironm
 import PageTitle from 'ui/components/data-display/pageTitle/pageTitle';
 import UserInformation from 'ui/components/data-display/userInformation/userInformation';
 import TextFieldMask from 'ui/components/inputs/textFieldMask/textFieldMask';
-import { Button, Typography, Container } from '@mui/material';
+import { Button, Typography, Container, CircularProgress } from '@mui/material';
 import {
   FormElementsContainer,
   ProfissionaisPaper,
@@ -12,7 +12,17 @@ import {
 import useIndex from 'data/hooks/pages/useIndex.page';
 
 const Home: NextPage = () => {
-  const { cep, setCep } = useIndex();
+  const {
+    cep,
+    setCep,
+    cepValido,
+    buscarProfissionais,
+    erro,
+    diaristas,
+    buscaFeita,
+    carregando,
+    diaristasRestantes,
+  } = useIndex();
   return (
     <div>
       <SafeEnvironment />
@@ -33,56 +43,60 @@ const Home: NextPage = () => {
             value={cep}
             onChange={(event) => setCep(event.target.value)}
           />
-          <Typography color={'error'}>Cep inválido</Typography>
+
+          {erro && <Typography color={'error'}>{erro}</Typography>}
+
           <Button
             variant={'contained'}
             color={'secondary'}
             sx={{ width: '220px' }}
+            disabled={!cepValido || carregando}
+            onClick={() => buscarProfissionais(cep)}
           >
-            Buscar
+            {carregando ? <CircularProgress size={20} /> : 'Buscar'}
           </Button>
         </FormElementsContainer>
 
-        <ProfissionaisPaper>
-          <ProfissionaisContainer>
-            <UserInformation
-              name={'Josefina'}
-              picture={'/img/diaristas/diarista02.png'}
-              rating={4}
-              description={'Rio de Janeiro'}
-            />
-            <UserInformation
-              name={'Maria'}
-              picture={'/img/diaristas/diarista01.jpeg'}
-              rating={4}
-              description={'Rio de Janeiro'}
-            />
-            <UserInformation
-              name={'Cristina'}
-              picture={'/img/diaristas/diarista02.png'}
-              rating={4}
-              description={'Rio de Janeiro'}
-            />
-            <UserInformation
-              name={'Rafaela'}
-              picture={'/img/diaristas/diarista01.jpeg'}
-              rating={4}
-              description={'Rio de Janeiro'}
-            />
-            <UserInformation
-              name={'Lana'}
-              picture={'/img/diaristas/diarista02.png'}
-              rating={4}
-              description={'Rio de Janeiro'}
-            />
-            <UserInformation
-              name={'Katia'}
-              picture={'/img/diaristas/diarista01.jpeg'}
-              rating={4}
-              description={'Rio de Janeiro'}
-            />
-          </ProfissionaisContainer>
-        </ProfissionaisPaper>
+        {buscaFeita &&
+          (diaristas.length > 0 ? (
+            <ProfissionaisPaper>
+              <ProfissionaisContainer>
+                {diaristas.map((item, index) => {
+                  return (
+                    <UserInformation
+                      key={index}
+                      name={item.nome_completo}
+                      picture={item.foto_usuario}
+                      rating={item.reputacao}
+                      description={item.cidade}
+                    />
+                  );
+                })}
+              </ProfissionaisContainer>
+              <Container sx={{ textAlign: 'center' }}>
+                {diaristasRestantes > 0 && (
+                  <Typography sx={{ mt: 5 }}>
+                    ...e mais {diaristasRestantes}{' '}
+                    {diaristasRestantes > 1
+                      ? 'profissionais disponíveis'
+                      : 'profissional disponível'}{' '}
+                    para seu endereço.
+                  </Typography>
+                )}
+                <Button
+                  variant={'contained'}
+                  color={'secondary'}
+                  sx={{ mt: 5 }}
+                >
+                  Contratar diarista
+                </Button>
+              </Container>
+            </ProfissionaisPaper>
+          ) : (
+            <Typography align={'center'} color={'textPrimary'}>
+              Sem diaristas disponíveis na sua região.
+            </Typography>
+          ))}
       </Container>
     </div>
   );
